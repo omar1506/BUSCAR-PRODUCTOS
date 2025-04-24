@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Buscador de productos</title>
+  <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+  <header>
+    <input type="search" id="buscar" placeholder="Buscar producto...">
+    <button id="buscar-btn">Buscar</button>
+  </header>
+  <main>
+    <table id="resultados">
+      <thead>
+        <tr>
+          <th>Código EUSA</th>
+          <th>Nombre del producto</th>
+          <th>Nombre del cliente</th>
+          <th>Nombre del estante</th>
+          <th>Código de barras</th>
+        </tr>
+      </thead>
+      <tbody id="resultados-body">
+        <!-- Aquí se mostrarán los resultados -->
+      </tbody>
+    </table>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>
