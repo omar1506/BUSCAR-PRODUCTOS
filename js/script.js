@@ -1,16 +1,20 @@
-// Simulación de base de datos
-const productos = [
-  { codigoEUSA: "12345", nombre: "Producto 1", cliente: "Pozuelo", estante: "P1", codigoBarras: "123456789" },
-  { codigoEUSA: "67890", nombre: "Producto 2", cliente: "Carguill", estante: "C2", codigoBarras: "987654321" },
-  // ...
-];
+let productos = []; // Aquí se guardará la base de datos cargada desde el CSV
+
+// Cargar el archivo CSV
+Papa.parse("productos.csv", {
+  download: true,
+  header: true,
+  complete: function(results) {
+    productos = results.data; // Ya tienes los productos listos
+    console.log("Productos cargados:", productos);
+  }
+});
 
 // Función para buscar productos
 function buscarProductos(query) {
-  const resultados = productos.filter(producto => {
-    return producto.codigoEUSA.includes(query) || producto.nombre.includes(query);
+  return productos.filter(producto => {
+    return producto.codigoEUSA?.includes(query) || producto.nombre?.toLowerCase().includes(query.toLowerCase());
   });
-  return resultados;
 }
 
 // Evento para buscar productos
@@ -19,6 +23,12 @@ document.getElementById("buscar-btn").addEventListener("click", () => {
   const resultados = buscarProductos(query);
   const resultadosBody = document.getElementById("resultados-body");
   resultadosBody.innerHTML = "";
+
+  if (resultados.length === 0) {
+    resultadosBody.innerHTML = `<tr><td colspan="5">No se encontraron resultados</td></tr>`;
+    return;
+  }
+
   resultados.forEach(resultado => {
     const row = document.createElement("tr");
     row.innerHTML = `
