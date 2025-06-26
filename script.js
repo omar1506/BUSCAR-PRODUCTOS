@@ -1,35 +1,45 @@
 let productos = [];
 
-// Cargar los productos desde el archivo CSV en GitHub
+// Cargar archivo CSV desde GitHub RAW
 Papa.parse("https://raw.githubusercontent.com/omar1506/BUSCAR-PRODUCTOS/main/productos.csv", {
   download: true,
   header: true,
   complete: function(results) {
     productos = results.data;
-    console.log("Productos cargados:", productos.length); // Para verificar que se cargaron
+    console.log("Productos cargados:", productos.length);
   }
 });
 
-// Función para buscar productos
+// Buscar productos con optimización
 function buscarProductos(query) {
+  const texto = query.trim().toLowerCase();
+  if (texto === "") return [];
+
   return productos.filter(producto => {
-    return producto.codigoEUSA?.includes(query) || producto.nombre?.toLowerCase().includes(query.toLowerCase());
+    return (
+      producto.codigoEUSA?.toLowerCase().includes(texto) ||
+      producto.nombre?.toLowerCase().includes(texto) ||
+      producto.cliente?.toLowerCase().includes(texto) ||
+      producto.estante?.toLowerCase().includes(texto) ||
+      producto.codigoBarras?.toLowerCase().includes(texto)
+    );
   });
 }
 
-// Evento del botón de búsqueda
-document.getElementById("buscar-btn").addEventListener("click", () => {
-  const query = document.getElementById("buscar").value.trim();
-  const resultados = buscarProductos(query);
+// Mostrar resultados en la tabla
+function mostrarResultados(resultados) {
   const resultadosBody = document.getElementById("resultados-body");
   resultadosBody.innerHTML = "";
 
   if (resultados.length === 0) {
-    resultadosBody.innerHTML = `<tr><td colspan="5">No se encontraron resultados</td></tr>`;
+    resultadosBody.innerHTML = `<tr><td colspan="5">❌ No se encontraron resultados</td></tr>`;
     return;
   }
 
-  resultados.forEach(resultado => {
+  // Limitar a los primeros 50
+  const resultadosLimitados = resultados.slice(0, 50);
+
+  resultadosLimitados.forEach(resultado => {
     const row = document.createElement("tr");
     row.innerHTML = `
       <td>${resultado.codigoEUSA || ""}</td>
@@ -40,6 +50,13 @@ document.getElementById("buscar-btn").addEventListener("click", () => {
     `;
     resultadosBody.appendChild(row);
   });
+}
+
+// Evento de búsqueda en tiempo real
+document.getElementById("buscar").addEventListener("input", () => {
+  const query = document.getElementById("buscar").value;
+  const resultados = buscarProductos(query);
+  mostrarResultados(resultados);
 });
 
 
