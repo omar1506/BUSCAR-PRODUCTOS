@@ -1,144 +1,31 @@
+// Paso 1: Declarar variable global
 let productos = [];
 
-// Cargar archivo CSV desde GitHub RAW
+// Paso 2: Cargar CSV desde GitHub (enlace RAW)
 Papa.parse("https://raw.githubusercontent.com/omar1506/BUSCAR-PRODUCTOS/main/productos.csv", {
   download: true,
   header: true,
   complete: function(results) {
     productos = results.data;
-    console.log("Productos cargados:", productos.length);
+    console.log("✅ Productos cargados:", productos.length);
+  },
+  error: function(error) {
+    console.error("❌ Error al cargar CSV:", error);
   }
 });
 
-// Buscar productos con optimización
-function buscarProductos(query) {
-  const texto = query.trim().toLowerCase();
-  if (texto === "") return [];
+// Paso 3: Mostrar en consola lo que el usuario busca
+document.getElementById("buscar-btn").addEventListener("click", () => {
+  const input = document.getElementById("buscar").value.trim().toLowerCase();
+  const resultados = productos.filter(p =>
+    Object.values(p).some(valor =>
+      valor?.toLowerCase().includes(input)
+    )
+  );
 
-  return productos.filter(producto => {
-    return (
-      producto.codigoEUSA?.toLowerCase().includes(texto) ||
-      producto.nombre?.toLowerCase().includes(texto) ||
-      producto.cliente?.toLowerCase().includes(texto) ||
-      producto.estante?.toLowerCase().includes(texto) ||
-      producto.codigoBarras?.toLowerCase().includes(texto)
-    );
-  });
-}
-
-// Mostrar resultados en la tabla
-function mostrarResultados(resultados) {
-  const resultadosBody = document.getElementById("resultados-body");
-  resultadosBody.innerHTML = "";
-
-  if (resultados.length === 0) {
-    resultadosBody.innerHTML = `<tr><td colspan="5">❌ No se encontraron resultados</td></tr>`;
-    return;
-  }
-
-  // Limitar a los primeros 50
-  const resultadosLimitados = resultados.slice(0, 50);
-
-  resultadosLimitados.forEach(resultado => {
-    const row = document.createElement("tr");
-    row.innerHTML = `
-      <td>${resultado.codigoEUSA || ""}</td>
-      <td>${resultado.nombre || ""}</td>
-      <td>${resultado.cliente || ""}</td>
-      <td>${resultado.estante || ""}</td>
-      <td>${resultado.codigoBarras || ""}</td>
-    `;
-    resultadosBody.appendChild(row);
-  });
-}
-
-// Evento de búsqueda en tiempo real
-document.getElementById("buscar").addEventListener("input", () => {
-  const query = document.getElementById("buscar").value;
-  const resultados = buscarProductos(query);
-  mostrarResultados(resultados);
+  console.log("🔍 Resultados encontrados:", resultados);
 });
 
-
-  
-    
-  
-  
-  
-  
-  
-  
-
-  
-
-  <link crossorigin="anonymous" media="all" rel="stylesheet" href="./script_files/light_experimental-d0637bbdaa51.css"><link crossorigin="anonymous" media="all" rel="stylesheet" href="./script_files/dark_experimental-b3eb81810916.css"><link data-color-theme="light_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_high_contrast_experimental-10abdc3747c3.css"><link data-color-theme="light_colorblind" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_colorblind_experimental-49cf0efe982a.css"><link data-color-theme="light_colorblind_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_colorblind_high_contrast_experimental-e379dad4f96f.css"><link data-color-theme="light_tritanopia" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_tritanopia_experimental-73918b3a2f64.css"><link data-color-theme="light_tritanopia_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_tritanopia_high_contrast_experimental-b843cf381204.css"><link data-color-theme="dark_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_high_contrast_experimental-5748739a6b50.css"><link data-color-theme="dark_colorblind" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_colorblind_experimental-c45cc62af0e7.css"><link data-color-theme="dark_colorblind_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_colorblind_high_contrast_experimental-32b00a22b284.css"><link data-color-theme="dark_tritanopia" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_tritanopia_experimental-dfdb41647a89.css"><link data-color-theme="dark_tritanopia_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_tritanopia_high_contrast_experimental-66cec90757f5.css"><link data-color-theme="dark_dimmed" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_dimmed_experimental-a537244628ca.css"><link data-color-theme="dark_dimmed_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_dimmed_high_contrast_experimental-dc9a2a96cdc6.css">
-
-
-    <link crossorigin="anonymous" media="all" rel="stylesheet" href="./script_files/primer-primitives-225433424a87.css">
-    <link crossorigin="anonymous" media="all" rel="stylesheet" href="./script_files/primer-b4bd0459f984.css">
-    <link crossorigin="anonymous" media="all" rel="stylesheet" href="./script_files/global-d0507817f2fa.css">
-    <link crossorigin="anonymous" media="all" rel="stylesheet" href="./script_files/github-58ac3ad6cb3f.css">
-  <link crossorigin="anonymous" media="all" rel="stylesheet" href="./script_files/repository-fa462f1c51f1.css">
-<link crossorigin="anonymous" media="all" rel="stylesheet" href="./script_files/code-5aa9e25e0a2c.css">
-
-  
-
-
-  <script type="application/json" id="client-env">{"locale":"en","featureFlags":["alternate_user_config_repo","api_insights_show_missing_data_banner","appearance_settings","billingplatform_copilot_premium_sku","client_version_header","codespaces_prebuild_region_target_update","contact_requests_implicit_opt_in","contentful_lp_copilot_extensions","contentful_lp_flex_features","contentful_lp_footnotes","copilot_chat_attach_images","copilot_chat_attach_multiple_images","copilot_chat_attachments","copilot_chat_custom_instructions","copilot_chat_disable_model_picker_while_streaming","copilot_chat_opening_thread_switch","copilot_chat_repo_custom_instructions_preview","copilot_chat_vision_in_claude","copilot_chat_vision_skip_thread_create","copilot_chat_wholearea_dd","copilot_custom_copilots_feature_preview","copilot_dotcom_chat_file_upload","copilot_duplicate_thread","copilot_free_to_paid_telem","copilot_ftp_settings_upgrade","copilot_ftp_upgrade_to_pro_from_models","copilot_ftp_your_copilot_settings","copilot_immersive_draft_issue_transform_urls_before_deserialize","copilot_immersive_structured_model_picker","copilot_new_conversation_starters","copilot_new_immersive_references_ui","copilot_no_floating_button","copilot_paste_text_files","copilot_premium_request_quotas","copilot_read_shared_conversation","copilot_share_active_subthread","copilot_showcase_icebreakers","copilot_spaces_support_forks","copilot_task_oriented_assistive_prompts","copilot_topics_as_references","copilot_workbench_iterate_panel","copilot_workbench_preview_analytics","copilot_workbench_refresh_on_wsod","copilot_workbench_user_limits","custom_copilots_128k_window","custom_copilots_capi_mode","custom_copilots_issues_prs","direct_to_salesforce","dnd_no_touch_device_check","dotcom_chat_client_side_skills","failbot_report_error_react_apps_on_page","ghost_pilot_confidence_truncation_25","ghost_pilot_confidence_truncation_40","github_models_scheduled_hydro_events","insert_before_patch","issues_catch_non_json_graphql_response","issues_preserve_tokens_in_urls","issues_react_blur_item_picker_on_close","issues_react_bots_timeline_pagination","issues_react_create_milestone","issues_react_include_bots_in_pickers","issues_react_prohibit_title_fallback","issues_react_remove_placeholders","issues_tab_counter_updates","lifecycle_label_name_updates","link_contact_sales_swp_marketo","marketing_pages_search_explore_provider","memex_mwl_filter_field_delimiter","memex_roadmap_drag_style","nonreporting_relay_graphql_status_codes","primer_primitives_experimental","primer_react_css_modules_ga","primer_react_select_panel_with_modern_action_list","react_quality_profiling_initial_render_duration","remove_child_patch","repository_suggester_elastic_search","sample_network_conn_type","sanitize_nested_mathjax_macros","scheduled_reminders_updated_limits","site_homepage_contentful","site_msbuild_hide_integrations","site_msbuild_launch","site_msbuild_webgl_hero","spark_commit_on_default_branch","swp_enterprise_contact_form","use_copilot_avatar","use_paginated_org_picker_cost_center_form","use_paginated_repo_picker_cost_center_form","viewscreen_sandbox"],"login":"omar1506"}</script>
-<script crossorigin="anonymous" type="application/javascript" src="./script_files/wp-runtime-1a3f5bf858ff.js.descarga" defer="defer"></script>
-<script crossorigin="anonymous" type="application/javascript" src="./script_files/vendors-node_modules_oddbird_popover-polyfill_dist_popover-fn_js-a8c266e5f126.js.descarga" defer="defer"></script>
-<script crossorigin="anonymous" type="application/javascript" src="./script_files/vendors-node_modules_github_mini-throttle_dist_index_js-node_modules_stacktrace-parser_dist_s-1d3d52-babac9434833.js.descarga" defer="defer"></script>
-<script crossorigin="anonymous" type="application/javascript" src="./script_files/ui_packages_failbot_failbot_ts-7cc3ec44644a.js.descarga" defer="defer"></script>
-<script crossorigin="anonymous" type="application/javascript" src="./script_files/environment-89128d48c6ff.js.descarga" defer="defer"></script>
-<script crossorigin="anonymous" type="application/javascript" src="./script_files/vendors-node_modules_primer_behaviors_dist_esm_index_mjs-c44edfed7f0d.js.descarga" defer="defer"></script>
-<script crossorigin="anonymous" type="application/javascript" src="./script_files/vendors-node_modules_github_selector-observer_dist_index_esm_js-cdf2757bd188.js.descarga" defer="defer"></script>
-<script crossorigin="anonymous" type="application/javascript" src="./script_files/vendors-node_modules_github_relative-time-element_dist_index_js-5913bc24f35d.js.descarga" defer="defer"></script>
-<script crossorigin="anonymous" type="application/javascript" src="./script_files/vendors-node_modules_github_text-expander-element_dist_index_js-e50fb7a5fe8c.js.descarga" defer="defer"></script>
-<script crossorigin="anonymous" type="application/javascript" src="./script_files/vendors-node_modules_github_auto-complete-element_dist_index_js-node_modules_github_catalyst_-8e9f78-c1e2fb329866.js.descarga" defer="defer"></script>
-<script crossorigin="anonymous" type="application/javascript" src="./script_files/vendors-node_modules_github_filter-input-element_dist_index_js-node_modules_github_remote-inp-d8c643-251bc3964eb6.js.descarga" defer="defer"></script>
-<script crossorigin="anonymous" type="application/javascript" src="./script_files/vendors-node_modules_github_markdown-toolbar-element_dist_index_js-6a8c7d9a08fe.js.descarga" defer="defer"></script>
-<script crossorigin="anonymous" type="application/javascript" src="./script_files/vendors-node_modules_github_file-attachment-element_dist_index_js-node_modules_primer_view-co-cadbad-fad3eaf3c7ec.js.descarga" defer="defer"></script>
-<script crossorigin="anonymous" type="application/javascript" src="./script_files/github-elements-2224a8aae785.js.descarga" defer="defer"></script>
-<script crossorigin="anonymous" type="application/javascript" src="./script_files/element-registry-bde3cdbe9e92.js.descarga" defer="defer"></script>
-<script crossorigin="anonymous" type="application/javascript" src="./script_files/vendors-node_modules_braintree_browser-detection_dist_browser-detection_js-node_modules_githu-bb80ec-34c4b68b1dd3.js.descarga" defer="defer"></script>
-<script crossorigin="anonymous" type="application/javascript" src="./script_files/vendors-node_modules_lit-html_lit-html_js-b93a87060d31.js.descarga" defer="defer"></script>
-<script crossorigin="anonymous" type="application/javascript" src="./script_files/vendors-node_modules_morphdom_dist_morphdom-esm_js-300e8e4e0414.js.descarga" defer="defer"></script>
-<script crossorigin="anonymous" type="application/javascript" src="./script_files/vendors-node_modules_fzy_js_index_js-node_modules_github_paste-markdown_dist_index_js-63a26702fa42.js.descarga" defer="defer"></script>
-<script crossorigin="anonymous" type="application/javascript" src="./script_files/vendors-node_modules_github_turbo_dist_turbo_es2017-esm_js-595819d3686f.js.descarga" defer="defer"></script>
-<script crossorigin="anonymous" type="application/javascript" src="./script_files/vendors-node_modules_github_remote-form_dist_index_js-node_modules_delegated-events_dist_inde-893f9f-1bcf38e06f01.js.descarga" defer="defer"></script>
-<script crossorigin="anonymous" type="application/javascript" src="./script_files/vendors-node_modules_color-convert_index_js-1a149db8dc99.js.descarga" defer="defer"></script>
-<script crossorigin="anonymous" type="application/javascript" src="./script_files/vendors-node_modules_github_quote-selection_dist_index_js-node_modules_github_session-resume_-c1aa61-91618cb63471.js.descarga" defer="defer"></script>
-<script crossorigin="anonymous" type="application/javascript" src="./script_files/ui_packages_updatable-content_updatable-content_ts-a5daa16ae903.js.descarga" defer="defer"></script>
-<script crossorigin="anonymous" type="application/javascript" src="./script_files/app_assets_modules_github_behaviors_task-list_ts-app_assets_modules_github_sso_ts-ui_packages-900dde-f953ddf42948.js.descarga" defer="defer"></script>
-<script crossorigin="anonymous" type="application/javascript" src="./script_files/app_assets_modules_github_sticky-scroll-into-view_ts-e45aabc67d13.js.descarga" defer="defer"></script>
-<script crossorigin="anonymous" type="application/javascript" src="./script_files/app_assets_modules_github_behaviors_ajax-error_ts-app_assets_modules_github_behaviors_include-d0d0a6-a7da4270c5f4.js.descarga" defer="defer"></script>
-<script crossorigin="anonymous" type="application/javascript" src="./script_files/app_assets_modules_github_behaviors_commenting_edit_ts-app_assets_modules_github_behaviors_ht-83c235-567e0f340e27.js.descarga" defer="defer"></script>
-<script crossorigin="anonymous" type="application/javascript" src="./script_files/behaviors-c31f56897d5c.js.descarga" defer="defer"></script>
-<script crossorigin="anonymous" type="application/javascript" src="./script_files/vendors-node_modules_delegated-events_dist_index_js-node_modules_github_catalyst_lib_index_js-ea8eaa-eefe25567449.js.descarga" defer="defer"></script>
-<script crossorigin="anonymous" type="application/javascript" src="./script_files/notifications-global-eadae94940d6.js.descarga" defer="defer"></script>
-<script crossorigin="anonymous" type="application/javascript" src="./script_files/vendors-node_modules_github_mini-throttle_dist_index_js-node_modules_virtualized-list_es_inde-5cfb7e-03a3356911e6.js.descarga" defer="defer"></script>
-<script crossorigin="anonymous" type="application/javascript" src="./script_files/vendors-node_modules_github_remote-form_dist_index_js-node_modules_delegated-events_dist_inde-70450e-bd02070d35a3.js.descarga" defer="defer"></script>
-<script crossorigin="anonymous" type="application/javascript" src="./script_files/app_assets_modules_github_ref-selector_ts-4c3b35d0e753.js.descarga" defer="defer"></script>
-<script crossorigin="anonymous" type="application/javascript" src="./script_files/codespaces-beb77f9a88fd.js.descarga" defer="defer"></script>
-<script crossorigin="anonymous" type="application/javascript" src="./script_files/vendors-node_modules_github_filter-input-element_dist_index_js-node_modules_github_remote-inp-3eebbd-c8d976843cc9.js.descarga" defer="defer"></script>
-<script crossorigin="anonymous" type="application/javascript" src="./script_files/vendors-node_modules_github_mini-throttle_dist_decorators_js-node_modules_delegated-events_di-e161aa-7cb68a617c15.js.descarga" defer="defer"></script>
-<script crossorigin="anonymous" type="application/javascript" src="./script_files/vendors-node_modules_github_file-attachment-element_dist_index_js-node_modules_github_remote--3c9c82-aa5ff674466d.js.descarga" defer="defer"></script>
-<script crossorigin="anonymous" type="application/javascript" src="./script_files/repositories-05d32eb33e8d.js.descarga" defer="defer"></script>
-<script crossorigin="anonymous" type="application/javascript" src="./script_files/vendors-node_modules_github_mini-throttle_dist_index_js-node_modules_github_catalyst_lib_inde-dbbea9-558c1f223d1d.js.descarga" defer="defer"></script>
-<script crossorigin="anonymous" type="application/javascript" src="./script_files/code-menu-8c39716e9d81.js.descarga" defer="defer"></script>
-<script crossorigin="anonymous" type="application/javascript" src="./script_files/primer-react-a57080a0a6e8.js.descarga" defer="defer"></script>
-<script crossorigin="anonymous" type="application/javascript" src="./script_files/react-core-a1fc25f8026e.js.descarga" defer="defer"></script>
-<script crossorigin="anonymous" type="application/javascript" src="./script_files/react-lib-8705026b409a.js.descarga" defer="defer"></script>
-<script crossorigin="anonymous" type="application/javascript" src="./script_files/octicons-react-9fd6ca6872cc.js.descarga" defer="defer"></script>
-<script crossorigin="anonymous" type="application/javascript" src="./script_files/vendors-node_modules_emotion_is-prop-valid_dist_emotion-is-prop-valid_esm_js-node_modules_emo-b1c483-b5947865157f.js.descarga" defer="defer"></script>
-<script crossorigin="anonymous" type="application/javascript" src="./script_files/vendors-node_modules_cookie_index_js-node_modules_primer_live-region-element_dist_esm_index_j-1ca8f6-89ab81577c38.js.descarga" defer="defer"></script>
-<script crossorigin="anonymous" type="application/javascript" src="./script_files/vendors-node_modules_tanstack_query-core_build_modern_queryObserver_js-node_modules_tanstack_-defd52-0024bc0658ed.js.descarga" defer="defer"></script>
-<script crossorigin="anonymous" type="application/javascript" src="./script_files/ui_packages_agent-sessions_utils_elapsed-time-util_ts-ui_packages_agent-sessions_hooks_useSes-bd1a31-e50ebb9c18d2.js.descarga" defer="defer"></script>
-<script crossorigin="anonymous" type="application/javascript" src="./script_files/copilot-coding-agent-status-8664d1d4714c.js.descarga" defer="defer"></script>
-<link crossorigin="anonymous" media="all" rel="stylesheet" href="./script_files/primer-react.56caf1a9ff4a5de8a71f.module.css">
-<link crossorigin="anonymous" media="all" rel="stylesheet" href="./script_files/copilot-coding-agent-status.32796c3e0ecdbdaa8ce6.module.css">
-  
-  <link crossorigin="anonymous" media="all" rel="stylesheet" href="./script_files/notifications-subscriptions-menu.07dab7f319b881c93ef5.module.css">
 
 
   
